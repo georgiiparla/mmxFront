@@ -1,101 +1,92 @@
-import Image from "next/image";
+'use client'
+import { useInView } from 'react-intersection-observer'
+import { useRef } from 'react'
 
-export default function Home() {
+import Image from 'next/image'
+import { ChevronDoubleDownIcon } from '@heroicons/react/24/outline'
+
+import DepartmentCard from './ui/cards/DepartmentCard'
+
+export default function Page() {
+  const { ref: sectionRef, inView: isSectionInView } = useInView({
+    triggerOnce: true, // Animation triggers only once
+    threshold: 0.1, // Percentage of the section visible before triggering the animation
+  })
+  const targetSectionRef = useRef<HTMLDivElement>(null)
+
+  const scrollToSection = () => {
+    if (targetSectionRef.current) {
+      targetSectionRef.current.scrollIntoView({ behavior: 'smooth' })
+    }
+  }
   return (
-    <div className="grid grid-rows-[20px_1fr_20px] items-center justify-items-center min-h-screen p-8 pb-20 gap-16 sm:p-20 font-[family-name:var(--font-geist-sans)]">
-      <main className="flex flex-col gap-8 row-start-2 items-center sm:items-start">
+    <main className='flex min-h-screen flex-col gap-32 p-6'>
+      <div
+        className='relative mx-auto flex h-[80vh] w-full animate-fade cursor-pointer flex-col justify-center overflow-hidden rounded-xl bg-[url("/photos/vrlady.webp")] bg-cover bg-center px-4 py-8 shadow-md'
+        onClick={scrollToSection}
+      >
+        <div className='absolute inset-0 bg-gradient-to-t from-zinc-900 from-50% to-transparent opacity-70'></div>
         <Image
-          className="dark:invert"
-          src="https://nextjs.org/icons/next.svg"
-          alt="Next.js logo"
-          width={180}
-          height={38}
-          priority
-        />
-        <ol className="list-inside list-decimal text-sm text-center sm:text-left font-[family-name:var(--font-geist-mono)]">
-          <li className="mb-2">
-            Get started by editing{" "}
-            <code className="bg-black/[.05] dark:bg-white/[.06] px-1 py-0.5 rounded font-semibold">
-              src/app/page.tsx
-            </code>
-            .
-          </li>
-          <li>Save and see your changes instantly.</li>
-        </ol>
+          src='/mmxLogo.png'
+          width={400}
+          height={400}
+          alt='logo'
+          className='relative z-10 mx-auto'
+        ></Image>
 
-        <div className="flex gap-4 items-center flex-col sm:flex-row">
-          <a
-            className="rounded-full border border-solid border-transparent transition-colors flex items-center justify-center bg-foreground text-background gap-2 hover:bg-[#383838] dark:hover:bg-[#ccc] text-sm sm:text-base h-10 sm:h-12 px-4 sm:px-5"
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <Image
-              className="dark:invert"
-              src="https://nextjs.org/icons/vercel.svg"
-              alt="Vercel logomark"
-              width={20}
-              height={20}
-            />
-            Deploy now
-          </a>
-          <a
-            className="rounded-full border border-solid border-black/[.08] dark:border-white/[.145] transition-colors flex items-center justify-center hover:bg-[#f2f2f2] dark:hover:bg-[#1a1a1a] hover:border-transparent text-sm sm:text-base h-10 sm:h-12 px-4 sm:px-5 sm:min-w-44"
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Read our docs
-          </a>
+        <ChevronDoubleDownIcon className='absolute bottom-4 left-1/2 h-7 w-7 -translate-x-1/2 transform text-yellow-400' />
+      </div>
+
+      <div ref={targetSectionRef}>
+        <div
+          className={`container mx-auto mb-32 grid max-h-[1920px] grid-cols-1 gap-6 lg:max-w-[768px] xl:max-w-[1280px] xl:grid-cols-2 ${
+            isSectionInView ? 'animate-fade' : 'opacity-0'
+          }`}
+          ref={sectionRef}
+        >
+          <DepartmentCard
+            departmentLink='/battlemaxx'
+            cardBgImagePath='/photos/bmxKid.webp'
+            cardBgImagePathAlt='BattlemaxxImage'
+            cardTitle='BATTLEMAXX'
+            badges={[
+              { badgeTitle: 'Outdoor LaserTag', badgeType: 'badge-warning' },
+            ]}
+          />
+          <DepartmentCard
+            departmentLink='/multimaxx-stjulians'
+            cardBgImagePath='/photos/laserTeam.jpg'
+            cardBgImagePathAlt='MultimaxxImage'
+            cardTitle='MULTIMAXX ST. JULIANS'
+            badges={[
+              { badgeTitle: 'Arcade Machines', badgeType: 'badge-primary' },
+              { badgeTitle: 'Indoor LaserTag', badgeType: 'badge-secondary' },
+              { badgeTitle: 'Virtual Reality', badgeType: 'badge-accent' },
+            ]}
+          />
+          <DepartmentCard
+            departmentLink='/multimaxx-paola'
+            cardBgImagePath='/photos/cmxLaserTag.jpg'
+            cardBgImagePathAlt='CybermaxxImage'
+            cardTitle='CYBERMAXX'
+            badges={[
+              { badgeTitle: 'Indoor LaserTag', badgeType: 'badge-secondary' },
+            ]}
+          />
+          <DepartmentCard
+            departmentLink='/multimaxx-qormi'
+            cardBgImagePath='/photos/paviCars.jpg'
+            cardBgImagePathAlt='MultimaxxQormiImage'
+            cardTitle='MULTIMAXX QORMI'
+            badges={[
+              { badgeTitle: 'Arcade Machines', badgeType: 'badge-primary' },
+              { badgeTitle: 'Bumping Cars', badgeType: 'badge-error' },
+              { badgeTitle: 'Virtual Reality', badgeType: 'badge-accent' },
+              { badgeTitle: 'Soft Play Area', badgeType: 'badge-outline' },
+            ]}
+          />
         </div>
-      </main>
-      <footer className="row-start-3 flex gap-6 flex-wrap items-center justify-center">
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="https://nextjs.org/icons/file.svg"
-            alt="File icon"
-            width={16}
-            height={16}
-          />
-          Learn
-        </a>
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="https://nextjs.org/icons/window.svg"
-            alt="Window icon"
-            width={16}
-            height={16}
-          />
-          Examples
-        </a>
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://nextjs.org?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="https://nextjs.org/icons/globe.svg"
-            alt="Globe icon"
-            width={16}
-            height={16}
-          />
-          Go to nextjs.org →
-        </a>
-      </footer>
-    </div>
-  );
+      </div>
+    </main>
+  )
 }
